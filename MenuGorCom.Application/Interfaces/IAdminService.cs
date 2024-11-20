@@ -1,14 +1,20 @@
-﻿// File: IAdminService.cs
+﻿using MenuGorCom.Application.DTOs;
+using MenuGorCom.Core.DTOs;
 using System.Collections.Generic;
-using MenuGorCom.Application.DTOs;
 
 namespace MenuGorCom.Application.Interfaces
 {
     public interface IAdminService
     {
-        List<AdminDto> GetAllAdmins();
-        AdminDto GetAdminById(int id);
-        void AddAdmin(AdminDto adminDto);
-        void UpdateAdmin(AdminDto adminDto);
-        void DeleteAdmin(int id); // Pasife alma    }
-    }
+        //IEnumerable<AdminDetailDto> GetAllAdmins(); // Tüm adminleri getir
+        IEnumerable<AdminDetailDto> GetActiveAdmins(); // Aktif adminleri getir
+        IEnumerable<AdminDetailDto> GetDeletedAdmins(); // Silinmiş adminleri getir
+        IEnumerable<AdminDetailDto> GetPassiveAdmins(); // Pasif adminleri getir
+
+        AdminDetailDto GetAdminById(int id); // Belirli bir adminin detaylarını getir
+        void AddAdmin(AdminCreateDto adminCreateDto); // Yeni admin ekle
+        void UpdateAdmin(AdminUpdateDto adminUpdateDto); // Admin güncelle
+        void DeleteAdmin(int id); // Admini pasif yap (silme yerine)
+        IEnumerable<AdminDto> GetAllAdmins(); // Tüm adminleri getir
+     }
+}

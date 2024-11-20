@@ -1,7 +1,8 @@
-﻿// File: AdminController.cs
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MenuGorCom.Application.Interfaces;
 using MenuGorCom.Application.DTOs;
+using MenuGorCom.Application.ViewModels;
+using MenuGorCom.Core.DTOs;
 
 namespace MenuGorCom.Web.Controllers
 {
@@ -16,11 +17,62 @@ namespace MenuGorCom.Web.Controllers
 
         // Admin Listesi
         [HttpGet]
-        public IActionResult AdminList()
+        public IActionResult AdminList(string filter = "All")
         {
-            var adminList = _adminService.GetAllAdmins();
-            return View(adminList); // AdminList.cshtml'e veri gönderiliyor
+            IEnumerable<AdminDto> admins = filter switch
+            {
+                "Active" => _adminService.GetActiveAdmins()
+                                         .Select(admin => new AdminDto
+                                         {
+                                             Id = admin.Id,
+                                             Username = admin.Username,
+                                             Email = admin.Email,
+                                             LastLogin = admin.LastLogin,
+                                             IsActive = admin.IsActive,
+                                             IsDeleted = admin.IsDeleted
+                                         }),
+                "Passive" => _adminService.GetPassiveAdmins()
+                                          .Select(admin => new AdminDto
+                                          {
+                                              Id = admin.Id,
+                                              Username = admin.Username,
+                                              Email = admin.Email,
+                                              LastLogin = admin.LastLogin,
+                                              IsActive = admin.IsActive,
+                                              IsDeleted = admin.IsDeleted
+                                          }),
+                "Deleted" => _adminService.GetDeletedAdmins()
+                                          .Select(admin => new AdminDto
+                                          {
+                                              Id = admin.Id,
+                                              Username = admin.Username,
+                                              Email = admin.Email,
+                                              LastLogin = admin.LastLogin,
+                                              IsActive = admin.IsActive,
+                                              IsDeleted = admin.IsDeleted
+                                          }),
+                _ => _adminService.GetAllAdmins()
+                                  .Select(admin => new AdminDto
+                                  {
+                                      Id = admin.Id,
+                                      Username = admin.Username,
+                                      Email = admin.Email,
+                                      LastLogin = admin.LastLogin,
+                                      IsActive = admin.IsActive,
+                                      IsDeleted = admin.IsDeleted
+                                  })
+            };
+
+            var viewModel = new AdminListViewModel
+            {
+                Filter = filter,
+                Admins = admins
+            };
+
+            return View(viewModel);
         }
+
+
 
         // Admin Detay Görüntüleme
         [HttpGet]
@@ -31,27 +83,28 @@ namespace MenuGorCom.Web.Controllers
             {
                 return NotFound();
             }
-            return View(admin); // AdminDetails.cshtml'e veri gönderiliyor
-        }
-
-        // Admin Ekleme - GET
-        [HttpGet]
-        public IActionResult CreateAdmin()
-        {
-            return View(); // AdminCreate.cshtml sayfasını döndürür
+            return View(admin);
         }
 
         // Admin Ekleme - POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateAdmin(AdminDto adminDto)
+        public IActionResult AddAdmin(AdminCreateDto adminCreateDto)
         {
             if (ModelState.IsValid)
             {
-                _adminService.AddAdmin(adminDto);
+                _adminService.AddAdmin(adminCreateDto);
                 return RedirectToAction("AdminList");
             }
-            return View(adminDto); // Hatalı form gönderiminde sayfayı geri döndürür
+
+            // Eğer hata varsa listeyi yeniden doldur ve ekleme formunu yeniden göster
+            var adminList = _adminService.GetAllAdmins();
+            var viewModel = new AdminListViewModel
+            {
+                Filter = "All",
+                Admins = adminList
+            };
+            return View("AdminList", viewModel);
         }
 
         // Admin Düzenleme - GET
@@ -63,20 +116,33 @@ namespace MenuGorCom.Web.Controllers
             {
                 return NotFound();
             }
-            return View(admin); // AdminEdit.cshtml sayfasına veri gönderilir
+
+            var adminUpdateDto = new AdminUpdateDto
+            {
+                Id = admin.Id,
+                Username = admin.Username,
+                Email = admin.Email,
+                FirstName = admin.FirstName,
+                LastName = admin.LastName,
+                Role = admin.Role,
+                IsActive = admin.IsActive
+            };
+
+            return View(adminUpdateDto);
         }
 
         // Admin Düzenleme - POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditAdmin(AdminDto adminDto)
+        public IActionResult EditAdmin(AdminUpdateDto adminUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                _adminService.UpdateAdmin(adminDto);
+                _adminService.UpdateAdmin(adminUpdateDto);
                 return RedirectToAction("AdminList");
             }
-            return View(adminDto);
+
+            return View(adminUpdateDto);
         }
 
         // Admin Silme (Pasife Alma)
@@ -90,7 +156,7 @@ namespace MenuGorCom.Web.Controllers
                 return NotFound();
             }
 
-            _adminService.DeleteAdmin(id); // Silme yerine pasife alma işlemi yapılır
+            _adminService.DeleteAdmin(id);
             return RedirectToAction("AdminList");
         }
     }

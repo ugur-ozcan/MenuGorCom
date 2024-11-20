@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Admin>
+﻿@using MenuGorCom.Application.DTOs
+@model IEnumerable<AdminDto>
 
 <h1>Admin Paneli</h1>
 
@@ -20,7 +21,7 @@
                 <td>@admin.Id</td>
                 <td>@admin.Username</td>
                 <td>@admin.Email</td>
-                <td>@admin.LastLoginDate</td>
+                <td>@admin.LastLogin</td>
                 <td>@(admin.IsDeleted ? "Pasif" : "Aktif")</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@admin.Id" class="btn btn-primary btn-sm">Düzenle</a>
