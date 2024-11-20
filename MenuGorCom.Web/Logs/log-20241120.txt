@@ -18,3 +18,14 @@
 2024-11-20 09:40:47.510 +03:00 [INF] Finished handling request: 200
 2024-11-20 09:41:23.708 +03:00 [INF] Handling request: GET /admin
 2024-11-20 09:41:23.711 +03:00 [INF] Finished handling request: 404
+2024-11-20 09:46:50.941 +03:00 [INF] Handling request: GET /
+2024-11-20 09:46:51.164 +03:00 [INF] Finished handling request: 200
+2024-11-20 09:46:51.415 +03:00 [INF] Handling request: GET /lib/bootstrap/dist/js/bootstrap.bundle.min.js.map
+2024-11-20 09:46:51.443 +03:00 [INF] Finished handling request: 200
+2024-11-20 09:47:01.646 +03:00 [INF] Handling request: GET /Admin
+2024-11-20 09:47:01.649 +03:00 [INF] Finished handling request: 404
+2024-11-20 09:47:07.250 +03:00 [INF] Handling request: GET /Admin/AdminList
+2024-11-20 09:47:34.107 +03:00 [INF] Handling request: GET /Admin/Index
+2024-11-20 09:47:34.108 +03:00 [INF] Finished handling request: 404
+2024-11-20 09:47:38.379 +03:00 [INF] Handling request: GET /Admin
+2024-11-20 09:47:38.380 +03:00 [INF] Finished handling request: 404

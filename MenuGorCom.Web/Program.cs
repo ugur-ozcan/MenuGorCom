@@ -2,6 +2,8 @@ using MenuGorCom.Infrastructure.Logging;
 using MenuGorCom.API.Middleware;
 using Microsoft.EntityFrameworkCore;
 using MenuGorCom.Infrastructure.Data;
+using MenuGorCom.Application.Interfaces;
+using MenuGorCom.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,8 @@ builder.Services.AddControllersWithViews();
 // Veritabaný baðlantýsý (Connection String)
 builder.Services.AddDbContext<MenuGorDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 
 // Serilog'u yapýlandýr
