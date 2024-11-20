@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Admin Kullanıcı Yönetimi";
+}
+ 
+<div class="container mt-4">
+    <h2>Admin Kullanıcı Yönetimi</h2>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Ara..." id="searchInput">
+        </div>
+        <div class="col-md-6 text-end">
+            <button class="btn btn-primary" onclick="addNewAdmin()">Yeni Kullanıcı Ekle</button>
+        </div>
+    </div>
+
+    <table class="table table-bordered table-hover table-responsive">
+        <thead class="thead-light">
+            <tr>
+                <th>#</th>
+                <th>Kullanıcı Adı</th>
+                <th>Email</th>
+                <th>Son Giriş Zamanı</th>
+                <th>Durum</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var admin in Model)
+            {
+                <tr>
+                    <td>@admin.Id</td>
+                    <td>@admin.Username</td>
+                    <td>@admin.Email</td>
+                    <td>@admin.LastLogin?.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>
+                        <span class="badge @(admin.IsActive ? "bg-success" : "bg-secondary")">
+                            @(admin.IsActive ? "Aktif" : "Pasif")
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-info" title="Detay"><i class="fas fa-eye"></i></button>
+                        <button class="btn btn-sm btn-warning" title="Düzenle"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger" title="Pasif Yap"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Sayfalama">
+        <ul class="pagination justify-content-end">
+            <li class="page-item"><a class="page-link" href="#">Önceki</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">Sonraki</a></li>
+        </ul>
+    </nav>
+</div>

@@ -1,10 +1,17 @@
 using MenuGorCom.Infrastructure.Logging;
 using MenuGorCom.API.Middleware;
+using Microsoft.EntityFrameworkCore;
+using MenuGorCom.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Veritabaný baðlantýsý (Connection String)
+builder.Services.AddDbContext<MenuGorDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 // Serilog'u yapýlandýr
 SerilogConfiguration.ConfigureLogger();

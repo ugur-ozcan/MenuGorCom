@@ -13,7 +13,10 @@ namespace MenuGorCom.Core.Entities
         public string Email { get; set; }
 
         // Şifre (Hashlenmiş olarak saklanacak)
-        public string PasswordHash { get; set; }
+        public string PasswordHash { get; set; } // Şifre hash olarak saklanacak
+
+        //Son giriş tarihi
+        public DateTime? LastLogin { get; set; }
 
         // Ad ve soyad
         public string FirstName { get; set; }
